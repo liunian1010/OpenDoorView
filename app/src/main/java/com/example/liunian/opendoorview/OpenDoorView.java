@@ -40,21 +40,19 @@ public class OpenDoorView extends View {
 
     Paint gourPaint; //打钩画笔
 
-    float bearing;//轴
-
     int progress = 1;//进度
 
-    boolean isFinish = false;
+    boolean isFinish = false;//整个动画是否已经结束，用来停止onDraw的继续调用
 
-    int px;
-    int py;
+    int px;//圆心
+    int py;//圆心
     int radius;//半径
     SweepGradient lg;//循环滚动的渐变圆环的渐变支持类，用的是扇形渐变
     ValueAnimator animRing;
     AnimatorSet animatorSet;
     Matrix matrixBitmap = new Matrix();
-    Path path;
-    Path mDst;//实时路径
+    Path path;//已经指定的打钩绘制路径
+    Path mDst;//根据PathMeasure计算出来的实时路径，用来绘制打钩
     PathMeasure mPathMeasure;
 
     public OpenDoorView(Context context) {
@@ -151,13 +149,10 @@ public class OpenDoorView extends View {
         // 画圆
         canvas.drawCircle(px, py, radius, circlePaint);
         canvas.save();
-        canvas.rotate(-bearing, px, py);
         //画60个刻度
         for (int i = 0; i < progress; i++) {
             //画刻度
             canvas.drawLine(px, py - radius, px, py - radius + dip2px(8), markerPaint);
-            canvas.save();
-            canvas.restore();
             //每隔15度旋转一下
             canvas.rotate(-6, px, py);
         }
@@ -165,7 +160,7 @@ public class OpenDoorView extends View {
 
         Matrix matrix = new Matrix();
         matrix.reset();//每次都要重置，不然颜色渐变起始位置不起作用
-        matrix.preRotate(startAngle - 5, px, py);  //颜色起始角度
+        matrix.preRotate(startAngle, px, py);  //颜色起始角度
         lg = new SweepGradient(px, py, mContext.getResources().getColor(ringColor), Color.TRANSPARENT);
         lg.setLocalMatrix(matrix);
         circleAnimorPaint.setShader(lg);
@@ -304,6 +299,5 @@ public class OpenDoorView extends View {
             startFinishAnimator();
         }
     }
-
 
 }
