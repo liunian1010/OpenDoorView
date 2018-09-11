@@ -5,4 +5,4 @@ android带动画效果的等待框</br>
 
 
 效果图：</br>
-![image](https://github.com/liunian1010/OpenDoorView/blob/master/OpenDoorView.gif)
+![image](https://github.com/liunian1010/OpenDoorView/blob/master/gif/OpenDoorView.gif)
